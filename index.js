@@ -37,12 +37,12 @@ app.use(session({
 app.use(morgan("dev"));
 
 // Deserialize user from session
-app.use((req, res, next) => {
-    if (req.session.user) {
-        res.locals.user = req.session.user;
-    }
-    next();
-});
+// app.use((req, res, next) => {
+//     if (req.session.user) {
+//         res.locals.user = req.session.user;
+//     }
+//     next();
+// });
 
 // Google OAuth route
 app.get('/auth/google', (req, res) => {
@@ -95,12 +95,12 @@ app.get('/auth/google/callback', async (req, res) => {
 // Dashboard route
 app.get('/dashboard', (req, res) => {
     // Check if the user is authenticated
-    if (!res.locals.user) {
+    if (!req.session.user) {
         return res.redirect('/auth/google'); // Redirect to login if not authenticated
     }
 
     // User is authenticated, display the dashboard
-    const user = res.locals.user;
+    const user = req.session.user;
     // res.send(`Welcome to your dashboard, ${user.displayName}!`);
     res.json(user);
 });
